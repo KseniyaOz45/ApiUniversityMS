@@ -25,9 +25,14 @@ public interface FacultyRepository extends JpaRepository<Faculty, Long> {
     @Query("SELECT f, COUNT(d) FROM Faculty f LEFT JOIN f.departments d GROUP BY f")
     Page<Object[]> findFacultiesWithDepartmentCount(Pageable pageable);
 
-    @Query("SELECT f, COALESCE(SUM(g.students.size), 0) FROM Faculty f " +
-            "LEFT JOIN f.departments d " +
-            "LEFT JOIN d.groups g GROUP BY f")
+    @Query("""
+        SELECT f, COALESCE(COUNT(s), 0) AS studentCount
+        FROM Faculty f
+        LEFT JOIN f.departments d
+        LEFT JOIN d.groups g
+        LEFT JOIN g.students s
+        GROUP BY f
+    """)
     Page<Object[]> findFacultiesWithStudentCount(Pageable pageable);
 
     @Query("SELECT f.name, COUNT(DISTINCT d), COUNT(DISTINCT t), COUNT(DISTINCT s) " +

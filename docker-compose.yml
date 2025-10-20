@@ -2,12 +2,13 @@ version: '3.8'
 
 services:
   db:
-    image: postgres
+    image: postgres:15
     container_name: apiuniversityms-db
     environment:
       POSTGRES_DB: universitydb
       POSTGRES_USER: universityuser
       POSTGRES_PASSWORD: password
+      TZ: UTC
     ports:
       - "5433:5432"  # 👈 пробрасываем на 5433, чтобы не конфликтовал с локальным Postgres
     volumes:

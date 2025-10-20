@@ -35,8 +35,13 @@ public interface DepartmentRepository extends JpaRepository<Department, Long> {
     @Query("SELECT d, COUNT(di) FROM Department d LEFT JOIN d.disciplines di GROUP BY d")
     Page<Object[]> findDepartmentsWithDisciplineCount(Pageable pageable);
 
-    @Query("SELECT d, COALESCE(SUM(g.students.size), 0) FROM Department d " +
-            "LEFT JOIN d.groups g GROUP BY d")
+    @Query("""
+        SELECT d AS department, COUNT(s) AS studentCount
+        FROM Department d
+        JOIN d.groups g
+        JOIN g.students s
+        GROUP BY d
+    """)
     Page<Department> findDepartmentsWithStudentCount(Pageable pageable);
 
     @Query("SELECT d FROM Department d WHERE " +
