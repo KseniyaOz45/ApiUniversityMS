@@ -1,17 +1,17 @@
 version: '3.8'
 
 services:
-  postgres:
-    image: postgres:latest
-    container_name: universityMS-postgres
+  db:
+    image: postgres
+    container_name: apiuniversityms-db
     environment:
-      POSTGRES_DB: university_db
-      POSTGRES_USER: university_user
-      POSTGRES_PASSWORD: university_password
+      POSTGRES_DB: universitydb
+      POSTGRES_USER: universityuser
+      POSTGRES_PASSWORD: password
     ports:
-      - "5432:5432"
+      - "5433:5432"  # 👈 пробрасываем на 5433, чтобы не конфликтовал с локальным Postgres
     volumes:
-      - postgres_data:/var/lib/postgresql/data
-      - ./src/main/resources/db/migration:/docker-entrypoint-initdb.d
+      - db-data:/var/lib/postgresql/data
+
 volumes:
-  postgres_data:
+  db-data:
